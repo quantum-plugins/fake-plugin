@@ -1,0 +1,74 @@
+name: Build, Test and publish
+
+on:
+    push:
+        branches:
+            - '*'
+        tags:
+            - '*'
+jobs:
+    tox:
+        name: Run Tox python-${{ matrix.version }} ${{ matrix.os }}
+        runs-on: ${{ matrix.os }}
+        strategy:
+            fail-fast: false
+            matrix:
+                version:
+                    - '3.12'
+                    - '3.11'
+                    - '3.10'
+                os:
+                    - ubuntu-20.04
+                    - ubuntu-22.04-arm
+
+        permissions:
+            contents: read
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-python@v5
+              with:
+                  python-version: ${{ matrix.version }}
+
+            - name: install dependencies
+              run: |
+                  pip install -r requirements.txt -r dev-requirements.txt
+
+            - name: Run tox checks
+              run: tox
+
+    publish:
+        name: Upload package to PYPI
+        runs-on: ubuntu-24.04
+
+        needs: tox
+
+        if: startsWith(github.ref, 'refs/tags/')
+
+        environment:
+            name: pypi
+            url: https://pypi.org/p/example_plugin # change example_plugin to your project's name
+
+        permissions:
+            id-token: write
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Set up Python 3.12
+              uses: actions/setup-python@v5
+              with:
+                  python-version: 3.12.8
+
+            - name: build package
+              run: |
+                  python3 -m pip install --upgrade build
+                  python3 -m build
+
+            - name: Publish to PYPI
+              uses: pypa/gh-action-pypi-publish@release/v1
+
+              # to properly publish that take a look at:
+              # https://github.com/marketplace/actions/pypi-publish
+              # https://medium.com/@blackary/publishing-a-python-package-from-github-to-pypi-in-2024-a6fb8635d45d
