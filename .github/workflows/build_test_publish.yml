@@ -18,7 +18,7 @@ jobs:
                     - '3.11'
                     - '3.10'
                 os:
-                    - ubuntu-20.04
+                    - ubuntu-22.04
                     - ubuntu-22.04-arm
 
         permissions:
@@ -33,7 +33,7 @@ jobs:
 
             - name: install dependencies
               run: |
-                  pip install -r requirements.txt -r dev-requirements.txt
+                  pip install -r dev-requirements.txt
 
             - name: Run tox checks
               run: tox
@@ -48,7 +48,7 @@ jobs:
 
         environment:
             name: pypi
-            url: https://pypi.org/p/example_plugin # change example_plugin to your project's name
+            url: https://pypi.org/p/fake_plugin
 
         permissions:
             id-token: write
@@ -69,6 +69,3 @@ jobs:
             - name: Publish to PYPI
               uses: pypa/gh-action-pypi-publish@release/v1
 
-              # to properly publish that take a look at:
-              # https://github.com/marketplace/actions/pypi-publish
-              # https://medium.com/@blackary/publishing-a-python-package-from-github-to-pypi-in-2024-a6fb8635d45d

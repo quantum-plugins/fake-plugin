@@ -10,7 +10,7 @@ from .config import AVAILABLE_RESULT_TYPES
 Backend = str
 Backends = List[Backend]
 Metadata = Dict[Any, Any]
-ResultType = Literal['counts', 'quasi_dist', 'expval']
+ResultType = Literal["counts", "quasi_dist", "expval"]
 QasmFilePath = str
 Results = Dict[str | int, float] | List[float]
 

@@ -1,3 +1,2 @@
-include requirements.txt
 include README.md
-include example_plugin/backends.txt #change it to your plugin folder
+include fake_plugin/backends.txt
