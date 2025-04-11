@@ -1,4 +1,5 @@
 import os
+from time import sleep
 from .interface import (
     PluginInterface,
     Backend,
@@ -49,5 +50,7 @@ class Plugin(PluginInterface):
 
         if result_type == "expval":
             assert metadata.get("obs") is not None, "Invalid observables"
+            
+        sleep(10) # simulate a job running
 
         return data_for_returning[result_type]  # type: ignore
